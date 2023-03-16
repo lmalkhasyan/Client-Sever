@@ -5,7 +5,7 @@ OBJS_CLIENT	= $(SRCS_CLIENT:.c=.o)
 SRCS_SERVER	= $(shell find "./Server" -name "*.c")
 OBJS_SERVER	= $(SRCS_SERVER:.c=.o)
 INCS		= -I.
-CFLAGS		= -Wall -Wextra -Werror $(INCS)
+CFLAGS		= -Wall -Wextra -Werror -lpthread $(INCS)
 RM			= rm -f
 CC			= cc
 
