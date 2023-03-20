@@ -33,4 +33,5 @@ c. shell “COMMAND”
 2. Fixed Client side program termination after server termination.
 3. Added autocomplete, history for client side from GNU Readline lib.
 4. Added Signal handling.
+5. Sending only one packed message
 
