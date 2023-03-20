@@ -1,6 +1,7 @@
 # Socket CLI
 
 ### Task Brief:
+### Version 0.0.1
 ### Write Linux based Client/Server socket application:
 ● Use C or C++ as a programming language (C is preferable)
 ● Use Makefile as a program building tool
@@ -26,3 +27,11 @@ Where the “IP_ADDRESS” is IP Address of the Server and the “PORT”is Serv
 Port Number
 b. disconnect
 c. shell “COMMAND”
+
+### Version 0.0.2
+Version 0.0.2
+1. Fixed problem with allocation size.
+2. Fixed Client side program termination after server termination.
+3. Added autocomplete, history for client side from GNU Readline lib.
+4. Added Signal handling.
+
