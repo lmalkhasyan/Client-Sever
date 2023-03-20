@@ -24,7 +24,7 @@ char *execute(const char *cmd)
             fprintf(stderr, "Realoc Error: out of memory\n");
             return NULL;
         }
-        strcat(buf + buf_size - nread, line);
+        memcpy(buf + buf_size - nread, line, nread);
         buf[buf_size] = '\0';
     }
     if (!buf)

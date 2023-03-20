@@ -50,25 +50,19 @@ int connect_to_server(char *ip, char *port)
             continue;
         }
         else if (status == 1)
-        {
             break;
-        }
 
         char *buffer = NULL;
         status = receiver(socket_server, &buffer);
         if (status != 0)
         {
-            close(socket_server);
+            if (status == 1)
+                break;
             if (buffer)
             {
                 free(message);
                 free(buffer);
                 buffer = NULL;
-            }
-            if (status == 1)
-            {
-                close(socket_server);
-                return -1;
             }
             free(message);
             continue;
@@ -77,6 +71,7 @@ int connect_to_server(char *ip, char *port)
         free(buffer);
         buffer = NULL;
     }
+    close(socket_server);
     free(message);
     clear_history();        
     return -1;
