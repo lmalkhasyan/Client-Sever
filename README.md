@@ -29,7 +29,6 @@ b. disconnect
 c. shell “COMMAND”
 
 ### Version 0.0.2
-Version 0.0.2
 1. Fixed problem with allocation size.
 2. Fixed Client side program termination after server termination.
 3. Added autocomplete, history for client side from GNU Readline lib.
