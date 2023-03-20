@@ -1,7 +1,11 @@
 #include "server.h"
 
+
+struct List sock_list = {.head = NULL, .size = 0, .socket_listen = -1};
+
 int main()
 {
+    signal(SIGINT, handle_sigint);
     printf("Configuring local address...\n");
     struct addrinfo hints;
 
@@ -26,6 +30,7 @@ int main()
         fprintf(stderr, "socket() failed. (%d)\n", errno);
         exit(EXIT_FAILURE);
     }
+    sock_list.socket_listen = socket_listen;
 
     printf("Binding socket to local address...\n");
     if (bind(socket_listen, bind_address->ai_addr, bind_address->ai_addrlen)) 
@@ -56,10 +61,12 @@ int main()
             fprintf(stderr, "accept() failed. (%d)\n", errno);
             exit(EXIT_FAILURE);
         }
-
+        push_front(&sock_list, socket_client);
+        struct Client_socket current = {.sock_node = sock_list.head, .list = &sock_list};
+        
         printf("Client is connected... \n");
         pthread_t client;
-        pthread_create(&client, NULL, client_thread, &socket_client);
+        pthread_create(&client, NULL, client_thread, &current);
         pthread_detach(client);
     }
 

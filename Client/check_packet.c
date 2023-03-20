@@ -3,10 +3,8 @@
 int check_packet(char *str, char **startpoint, int socket_server)
 {
     char *token = NULL;
-
-    str[strlen(str) - 1] = '\0';
     token = strtok(str, " ");
-    if (!token || *token == '\n')
+    if (!token)
         return 1;
     if (!strcmp(token, "disconnect") && strtok(NULL, " ") == NULL)
     {

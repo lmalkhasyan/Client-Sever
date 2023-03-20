@@ -2,23 +2,23 @@
 
 int main()
 {
-    char buffer[MAX_MSG_LEN];
+    signal(SIGINT, handle_sigint);
     char *token = NULL;
-    while (1)
+    char *buffer = NULL;
+    rl_bind_key('\t', rl_complete);
+    add_history("connect 127.0.0.1 8080");
+    while ((buffer = readline("Client>> ")) != NULL)
     {
-        printf("Client>> ");
-        if(!fgets(buffer, sizeof(buffer), stdin))
+        if (!*buffer)
             continue;
-        if (*buffer == '\n')
-            continue;
+        add_history(buffer);
 
-        buffer[strlen(buffer) - 1] = '\0';
         token = strtok(buffer, " ");
-        if(token == NULL)
-            continue;
         if (!strcmp(token, "quit"))
         {
             printf("Client>> Programm Termination!\n");
+            clear_history();
+            free(buffer);
             return 0;
         }
         else if (!strcmp(token, "connect"))
@@ -32,7 +32,7 @@ int main()
             else if (is_valid_ip(ip) && is_valid_port(port))
             {
                 printf("Client>> connection to [%s:%s]\n", ip, port);
-                if (connect_to_server(ip, port, buffer) < 0)
+                if (connect_to_server(ip, port) < 0)
                 {
                     printf("Client>> You can connect again!\n");
                 }
@@ -46,6 +46,7 @@ int main()
                     "         [shell \"command\"]\n"
                     "         ['quit' to close the client programm]\n");
         }
+        free(buffer);
     }
     return 0;
 }

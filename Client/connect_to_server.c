@@ -1,6 +1,8 @@
 #include "client.h"
 
-int connect_to_server(char *ip, char *port, char *message)
+int socket_server = -1;
+
+int connect_to_server(char *ip, char *port)
 {
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -13,8 +15,8 @@ int connect_to_server(char *ip, char *port, char *message)
         return -1;
     }
 
-    int socket_server = socket(peer_address->ai_family,
-            peer_address->ai_socktype, peer_address->ai_protocol);
+    socket_server = socket(peer_address->ai_family,
+                               peer_address->ai_socktype, peer_address->ai_protocol);
     if (socket_server < 0)
     {
         fprintf(stderr, "socket() failed. (%s)\n", strerror(errno));
@@ -29,22 +31,27 @@ int connect_to_server(char *ip, char *port, char *message)
     }
     freeaddrinfo(peer_address);
     printf("Client>> Connected!\n");
-
-    while (1)
+    char *message;
+    char *start_point = NULL;
+    while ((message = readline("Client>> ")) != NULL)
     {
-        printf("Client>> ");
-        fgets(message, MAX_MSG_LEN, stdin);
-
-        char *start_point = NULL;
+        add_history(message);
+        
         int status = check_packet(message, &start_point, socket_server);
         if (status == 1)
             continue;
         else if (status == -1)
             break;
 
-        if (sender(socket_server, start_point, strlen(start_point)) < 0)
+        status = sender(socket_server, start_point, strlen(start_point));
+        if (status < 0)
         {
+            free(message);
             continue;
+        }
+        else if (status == 1)
+        {
+            break;
         }
 
         char *buffer = NULL;
@@ -54,16 +61,23 @@ int connect_to_server(char *ip, char *port, char *message)
             close(socket_server);
             if (buffer)
             {
+                free(message);
                 free(buffer);
                 buffer = NULL;
             }
-            if(status == -1)
+            if (status == 1)
+            {
+                close(socket_server);
                 return -1;
+            }
+            free(message);
             continue;
         }
-
+        free(message);
         free(buffer);
         buffer = NULL;
     }
+    free(message);
+    clear_history();        
     return -1;
 }

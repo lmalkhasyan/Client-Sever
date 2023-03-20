@@ -5,7 +5,7 @@ OBJS_CLIENT	= $(SRCS_CLIENT:.c=.o)
 SRCS_SERVER	= $(shell find "./Server" -name "*.c")
 OBJS_SERVER	= $(SRCS_SERVER:.c=.o)
 INCS		= -I.
-CFLAGS		= -Wall -Wextra -Werror -lpthread $(INCS)
+CFLAGS		= -Wall -Wextra -Werror -pthread -lreadline $(INCS)
 RM			= rm -f
 CC			= cc
 
@@ -15,10 +15,10 @@ CC			= cc
 all:	$(CLIENT) $(SERVER)
 
 $(CLIENT):	$(OBJS_CLIENT)
-	$(CC) $(CFLAGS) -o $(CLIENT) $(OBJS_CLIENT)
+	$(CC) -o $(CLIENT) $(OBJS_CLIENT) $(CFLAGS) 
 
 $(SERVER):	$(OBJS_SERVER)
-	$(CC) $(CFLAGS) -o $(SERVER) $(OBJS_SERVER)
+	$(CC) -o $(SERVER) $(OBJS_SERVER) $(CFLAGS) 
 
 clean:
 	$(RM) $(OBJS_SERVER) $(OBJS_CLIENT)

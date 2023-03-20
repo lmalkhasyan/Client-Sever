@@ -11,7 +11,7 @@ int receiver(int socket, char **buffer)
     }
     else if (n == 0)
     {
-        fprintf(stderr, "Server disconnected\n");
+        fprintf(stderr, "Client>> Server disconnected\n");
         return 1;
     }
 
@@ -30,7 +30,7 @@ int receiver(int socket, char **buffer)
     }
     else if (n == 0)
     {
-        fprintf(stderr, "Server disconnected\n");
+        fprintf(stderr, "Client>> Server disconnected\n");
         return 1;
     }
     (*buffer)[length] = '\0';

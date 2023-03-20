@@ -7,7 +7,7 @@ int receiver(int socket, char **buffer)
     if (recv_status < 0)
     {
         perror("Error receiving length from Client:");
-        return -1;
+        return 1;
     }
     else if (recv_status == 0)
     {
@@ -27,7 +27,7 @@ int receiver(int socket, char **buffer)
     if (recv_status < 0)
     {
         perror("Error receiving message");
-        return -1;
+        return 1;
     }
     else if (recv_status == 0)
     {

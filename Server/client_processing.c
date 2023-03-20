@@ -2,22 +2,24 @@
 
 void *client_thread(void *arg)
 {
-    int client_fd = *(int *)arg;
+    struct Client_socket client = *(struct Client_socket *)arg;
 
     while (1)
     {
         char *buffer = NULL;
-        int status = receiver(client_fd, &buffer);
+        int status = receiver(client.sock_node->data, &buffer);
         if (status != 0)
         {
-            close(client_fd);
             if (buffer)
             {
                 free(buffer);
                 buffer = NULL;
             }
             if (status == -1)
+            {
+                delete_Node(client.list, client.sock_node);
                 return NULL;
+            }
             continue;
         }
 
@@ -32,7 +34,7 @@ void *client_thread(void *arg)
             continue;
         }
         printf("Server >> my output: %s\n", output);
-        sender(client_fd, output, strlen(output));
+        sender(&client, output, strlen(output));
         free(buffer);
         free(output);
     }
